@@ -1,0 +1,104 @@
+#!/usr/bin/env bash
+
+# Author: Einar Hansen
+# This script is a rewrite of Laravel Sail and Chris Fidaos course Shipping Docker
+# https://github.com/laravel/sail/
+# https://courses.serversforhackers.com/shipping-docker
+
+UNAMEOUT="$(uname -s)"
+
+# Verify operating system is supported...
+case "${UNAMEOUT}" in
+    Linux*)             MACHINE=linux;;
+    Darwin*)            MACHINE=mac;;
+    *)                  MACHINE="UNKNOWN"
+esac
+
+if [ "$MACHINE" == "UNKNOWN" ]; then
+    echo "Unsupported operating system [$(uname -s)]. Development script supports macOS, Linux, and Windows (WSL2)." >&2
+
+    exit 1
+fi
+
+if [ ! -f composer.json ]; then
+    echo "Please make sure to run this script from the root directory of this repo. 'bin/develop'"
+    exit 1
+fi
+
+# Determine if stdout is a terminal...
+if test -t 1; then
+    # Determine if colors are supported...
+    ncolors=$(tput colors)
+
+    if test -n "$ncolors" && test "$ncolors" -ge 8; then
+        BOLD="$(tput bold)"
+        RED="$(tput setaf 1)"
+        GREEN="$(tput setaf 2)"
+        YELLOW="$(tput setaf 3)"
+        BLUE="$(tput setaf 4)"
+        MAGENTA="$(tput setaf 5)"
+        CYAN="$(tput setaf 6)"
+        WHITE="$(tput setaf 7)"
+        NC="$(tput sgr0)"
+    fi
+fi
+
+export PHP_VERSION=${PHP_VERSION:-"8.1"}
+export IMAGE=${IMAGE:-"php:${PHP_VERSION}-alpine"}
+DOCKER="docker run -it --rm -v "$(pwd)":/app -w /app "$IMAGE""
+ARGS=()
+
+if [ "$1" == "composer" ]; then
+    shift 1
+
+    if [ ! -f bin/composer.phar ]; then
+        echo "${RED}Composer is not installed."
+        echo "${YELLOW}Installing composer locally..."
+        ${DOCKER[@]} php -r "copy('https://getcomposer.org/installer', 'bin/composer-setup.php');"
+        ${DOCKER[@]} php -r "if (hash_file('sha384', 'bin/composer-setup.php') === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('bin/composer-setup.php'); } echo PHP_EOL;"
+        ${DOCKER[@]} php bin/composer-setup.php
+        ${DOCKER[@]} php -r "unlink('bin/composer-setup.php');"
+        ${DOCKER[@]} php -r "rename('composer.phar', 'bin/composer.phar');"
+    fi
+
+    [ ! -t 0 ] && ARGS+=(-T)
+    ARGS+=("php bin/composer.phar" "$@")
+
+elif [ "$1" == "analyse" ] || [ "$1" == "phpstan" ]; then
+    shift 1
+
+    [ ! -t 0 ] && ARGS+=(-T)
+    if [ -z "$@" ]; then
+        ARGS+=("vendor/phpstan/phpstan/phpstan analyse src")
+    else
+        ARGS+=("vendor/phpstan/phpstan/phpstan" "$@")
+    fi
+
+elif [ "$1" == "fix" ] || [ "$1" == "format" ] || [ "$1" == "pint"  ] ; then
+    shift 1
+
+    [ ! -t 0 ] && ARGS+=(-T)
+    ARGS+=("vendor/bin/pint" "$@")
+
+elif [ "$1" == "test" ] || [ "$1" == "phpunit" ]; then
+    shift 1
+
+    [ ! -t 0 ] && ARGS+=(-T)
+    if [ -z "$@" ]; then
+        ARGS+=("vendor/bin/phpunit --testdox tests")
+    else
+        ARGS+=("vendor/bin/phpunit --testdox" "$@")
+    fi
+
+elif [ "$1" == "shell" ] || [ "$1" == "sh" ]; then
+    shift 1
+
+    [ ! -t 0 ] && ARGS+=(-T)
+    ARGS+=(sh "$@")
+
+else
+    ARGS+=("$@")
+fi
+
+echo "${GREEN}Running: ${CYAN}${BOLD}«${DOCKER[@]} ${ARGS[@]}» ${NC}" >&2
+${DOCKER[@]} ${ARGS[@]}

@@ -1,0 +1,36 @@
+<?php
+
+declare(strict_types=1);
+
+namespace EinarHansen\FootballData\Enums;
+
+enum Stage: string
+{
+    case APERTURA = 'APERTURA';
+    case CHAMPIONSHIP = 'CHAMPIONSHIP';
+    case CLAUSURA = 'CLAUSURA';
+    case FINAL = 'FINAL';
+    case GROUP_STAGE = 'GROUP_STAGE';
+    case LAST_16 = 'LAST_16';
+    case LAST_32 = 'LAST_32';
+    case LAST_64 = 'LAST_64';
+    case PLAYOFF_ROUND = 'PLAYOFF_ROUND';
+    case PLAYOFF_ROUND_1 = 'PLAYOFF_ROUND_1';
+    case PLAYOFF_ROUND_2 = 'PLAYOFF_ROUND_2';
+    case PLAYOFFS = 'PLAYOFFS';
+    case PRELIMINARY_ROUND = 'PRELIMINARY_ROUND';
+    case QUALIFICATION = 'QUALIFICATION';
+    case QUALIFICATION_ROUND_1 = 'QUALIFICATION_ROUND_1';
+    case QUALIFICATION_ROUND_2 = 'QUALIFICATION_ROUND_2';
+    case QUALIFICATION_ROUND_3 = 'QUALIFICATION_ROUND_3';
+    case QUARTER_FINALS = 'QUARTER_FINALS';
+    case REGULAR_SEASON = 'REGULAR_SEASON';
+    case RELEGATION = 'RELEGATION';
+    case RELEGATION_ROUND = 'RELEGATION_ROUN';
+    case ROUND_1 = 'ROUND_1';
+    case ROUND_2 = 'ROUND_2';
+    case ROUND_3 = 'ROUND_3';
+    case ROUND_4 = 'ROUND_4';
+    case SEMI_FINALS = 'SEMI_FINALS';
+    case THIRD_PLACE = 'THIRD_PLACE';
+}

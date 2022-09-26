@@ -1,0 +1,65 @@
+{
+    "name": "einar-hansen/football-data-api",
+    "description": "A PHP service that allows you to easily communicate with the football-data.org API.",
+    "keywords": [
+        "einar",
+        "einar-hansen",
+        "laravel",
+        "football",
+        "football-data.org"
+    ],
+    "homepage": "https://github.com/einar-hansen/php-football-data",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Einar Hansen",
+            "email": "einar@einarhansen.dev",
+            "homepage": "https://einarhansen.dev",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "einar-hansen/http-sdk": "^0.5.0",
+        "halaxa/json-machine": "^1.1",
+        "psr/http-client-implementation": "^1.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "guzzlehttp/guzzle": "^7.5",
+        "php-http/message": "^1.0",
+        "php-http/mock-client": "^1.0",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "phpunit/phpunit": "^9.5",
+        "symfony/http-client": "^6.1",
+        "symfony/var-dumper": "^6.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "EinarHansen\\FootballData\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EinarHansen\\FootballData\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "analyse": "vendor/bin/phpstan --level=9 analyse",
+        "format": "vendor/bin/pint",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "phpstan/extension-installer": true,
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

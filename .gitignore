@@ -1,0 +1,9 @@
+bin/composer.phar
+build
+certificate
+composer.lock
+vendor
+coverage
+make-*fixtures.php
+.DS_Store
+.phpunit.result.cache
