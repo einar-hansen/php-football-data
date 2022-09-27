@@ -1,6 +1,6 @@
 {
-    "name": "einar-hansen/football-data-api",
-    "description": "A PHP service that allows you to easily communicate with the football-data.org API.",
+    "name": "einar-hansen/php-football-data",
+    "description": "A PHP service for using the football-data.org API.",
     "keywords": [
         "einar",
         "einar-hansen",
