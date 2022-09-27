@@ -27,6 +27,8 @@ use Psr\Http\Message\UriFactoryInterface;
 
 final class FootballDataService extends Service implements ServiceContract, RateLimited
 {
+    public RateLimiterState $rateLimiterState;
+
     public function __construct(
         public readonly ?string $apiToken = null,
         public readonly string $baseUri = 'https://api.football-data.org',
@@ -35,7 +37,7 @@ final class FootballDataService extends Service implements ServiceContract, Rate
         UriFactoryInterface $uriFactory = null,
         StreamFactoryInterface $streamFactory = null,
         CollectionFactory $collectionFactory = null,
-        public RateLimiterState $rateLimiterState = null
+        RateLimiterState $rateLimiterState = null
     ) {
         parent::__construct(
             client: $client,
