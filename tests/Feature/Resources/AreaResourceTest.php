@@ -35,7 +35,7 @@ class AreaResourceTest extends TestCase
     /**
      * @test
      */
-    public function it_can_return_the_service_instance()
+    public function it_can_return_the_service_instance(): void
     {
         $this->assertInstanceOf(
             expected: Service::class,
@@ -46,7 +46,7 @@ class AreaResourceTest extends TestCase
     /**
      * @test
      */
-    public function it_can_return_a_collection_of_areas()
+    public function it_can_return_a_collection_of_areas(): void
     {
         $this->client->addResponse(
             response: $this->loadResponseFixture('Area/Areas.json')
@@ -73,7 +73,7 @@ class AreaResourceTest extends TestCase
         string $image,
         int $parentId,
         int $children,
-    ) {
+    ): void {
         $this->client->addResponse(
             response: $this->loadResponseFixture("Area/Area-{$areaId}.json")
         );

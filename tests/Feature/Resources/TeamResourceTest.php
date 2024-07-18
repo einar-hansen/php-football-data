@@ -37,7 +37,7 @@ class TeamResourceTest extends TestCase
     /**
      * @test
      */
-    public function it_can_return_the_service_instance()
+    public function it_can_return_the_service_instance(): void
     {
         $this->assertInstanceOf(
             expected: Service::class,
@@ -48,7 +48,7 @@ class TeamResourceTest extends TestCase
     /**
      * @test
      */
-    public function it_returns_a_paginated_collection_of_teams()
+    public function it_returns_a_paginated_collection_of_teams(): void
     {
         $this->client->addResponse(
             response: $this->loadResponseFixture('Team/Teams-page-1.json')
@@ -67,7 +67,7 @@ class TeamResourceTest extends TestCase
     /**
      * @test
      */
-    public function it_returns_all_teams_when_calling_all_collection_of_teams()
+    public function it_returns_all_teams_when_calling_all_collection_of_teams(): void
     {
         $this->client->addResponse(
             response: $this->loadResponseFixture('Team/Teams-page-1.json')

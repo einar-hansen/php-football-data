@@ -35,7 +35,7 @@ class CompetitionResourceTest extends TestCase
     /**
      * @test
      */
-    public function it_can_return_the_service_instance()
+    public function it_can_return_the_service_instance(): void
     {
         $this->assertInstanceOf(
             expected: Service::class,
@@ -46,7 +46,7 @@ class CompetitionResourceTest extends TestCase
     /**
      * @test
      */
-    public function it_can_return_a_collection_of_competitions()
+    public function it_can_return_a_collection_of_competitions(): void
     {
         $this->client->addResponse(
             response: $this->loadResponseFixture('Competition/Competitions.json')

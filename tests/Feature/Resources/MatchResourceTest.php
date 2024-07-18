@@ -35,7 +35,7 @@ class MatchResourceTest extends TestCase
     /**
      * @test
      */
-    public function it_can_return_the_service_instance()
+    public function it_can_return_the_service_instance(): void
     {
         $this->assertInstanceOf(
             expected: Service::class,
@@ -46,7 +46,7 @@ class MatchResourceTest extends TestCase
     /**
      * @test
      */
-    public function it_can_return_a_collection_of_matches()
+    public function it_can_return_a_collection_of_matches(): void
     {
         $this->client->addResponse(
             response: $this->loadResponseFixture('Match/Matches.json')
