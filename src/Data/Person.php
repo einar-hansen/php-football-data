@@ -37,7 +37,7 @@ class Person implements Data
             'name' => $this->name,
             'firstName' => $this->firstName,
             'lastName' => $this->lastName,
-            'dateOfBirth' => $this->dateOfBirth->format(format: DateTimeInterface::ISO8601),
+            'dateOfBirth' => $this->dateOfBirth->format(format: DateTimeInterface::ATOM),
             'nationality' => $this->nationality,
             'position' => $this->position,
             'shirtNumber' => $this->shirtNumber,
@@ -47,7 +47,7 @@ class Person implements Data
                 array: $this->competitions,
                 callback: fn (Competition $competition): array => $competition->toArray()
             ),
-            'updatedAt' => $this->updatedAt->format(format: DateTimeInterface::ISO8601),
+            'updatedAt' => $this->updatedAt->format(format: DateTimeInterface::ATOM),
         ];
     }
 

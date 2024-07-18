@@ -16,7 +16,7 @@ class TeamPaginator extends Paginator implements IteratorAggregate
     /**
      * {@inheritDoc}
      */
-    public function nextPage(): ?TeamPaginator
+    public function nextPage(): ?static
     {
         if ($this->hasMorePages()) {
             return $this->resource
@@ -32,7 +32,7 @@ class TeamPaginator extends Paginator implements IteratorAggregate
     /**
      * {@inheritDoc}
      */
-    public function previousPage(): ?TeamPaginator
+    public function previousPage(): ?static
     {
         if ($this->currentPage() > 1) {
             return $this->resource

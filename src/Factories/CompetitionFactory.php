@@ -34,7 +34,7 @@ class CompetitionFactory implements DataFactory
             ) : null,
             updatedAt: $attributes->dateTime(
                 key: 'lastUpdated',
-                format: DateTimeInterface::ISO8601
+                format: DateTimeInterface::ATOM
             ),
         );
     }

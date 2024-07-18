@@ -41,10 +41,10 @@ class FootballMatch implements Data
             'awayTeam' => $this->awayTeam->toArray(),
             'score' => $this->score->toArray(),
             'matchday' => $this->matchday,
-            'startingAt' => $this->startingAt->format(format: DateTimeInterface::ISO8601),
+            'startingAt' => $this->startingAt->format(format: DateTimeInterface::ATOM),
             'status' => $this->status->value,
             'stage' => $this->stage->value,
-            'updatedAt' => $this->updatedAt->format(format: DateTimeInterface::ISO8601),
+            'updatedAt' => $this->updatedAt->format(format: DateTimeInterface::ATOM),
             'group' => $this->group,
             'referees' => array_map(
                 array: $this->referees,

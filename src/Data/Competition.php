@@ -35,7 +35,7 @@ class Competition implements Data
             'area' => $this->area?->toArray(),
             'seasonCount' => $this->seasonCount,
             'season' => $this->season?->toArray(),
-            'updatedAt' => $this->updatedAt?->format(format: DateTimeInterface::ISO8601),
+            'updatedAt' => $this->updatedAt?->format(format: DateTimeInterface::ATOM),
         ];
     }
 

@@ -89,7 +89,7 @@ class AreaResourceTest extends TestCase
         $this->assertCount($children, $data->children);
     }
 
-    public function provideAreaData(): array
+    public static function provideAreaData(): array
     {
         return [
             'England' => [

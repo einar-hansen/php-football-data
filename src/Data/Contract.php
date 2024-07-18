@@ -20,8 +20,8 @@ class Contract implements Data
     public function toArray(): array
     {
         return [
-            'start' => $this->start?->format(format: DateTimeInterface::ISO8601),
-            'end' => $this->end?->format(format: DateTimeInterface::ISO8601),
+            'start' => $this->start?->format(format: DateTimeInterface::ATOM),
+            'end' => $this->end?->format(format: DateTimeInterface::ATOM),
         ];
     }
 

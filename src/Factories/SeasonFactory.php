@@ -22,7 +22,7 @@ class SeasonFactory implements DataFactory
             startingAt: $attributes->date(key: 'startDate'),
             endingAt: $attributes->date(key: 'endDate'),
             matchDay: $attributes->integer(key: 'currentMatchday', default: 0),
-            winner: $attributes->when(
+            team: $attributes->when(
                 key: 'winner',
                 callback: fn (array $team): Team => $this->teamFactory->make(
                     attributes: $team
