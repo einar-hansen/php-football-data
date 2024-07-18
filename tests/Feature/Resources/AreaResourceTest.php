@@ -10,6 +10,8 @@ use EinarHansen\FootballData\Resources\AreaResource;
 use EinarHansen\FootballData\Tests\Fixtures\HasResponseFixtures;
 use EinarHansen\Http\Contracts\Service\Service;
 use Http\Mock\Client;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 
@@ -32,9 +34,7 @@ class AreaResourceTest extends TestCase
         $this->resource = $this->service->areas();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_return_the_service_instance(): void
     {
         $this->assertInstanceOf(
@@ -43,9 +43,7 @@ class AreaResourceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_return_a_collection_of_areas(): void
     {
         $this->client->addResponse(
@@ -62,10 +60,8 @@ class AreaResourceTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider provideAreaData
-     * @test
-     */
+    #[Test]
+    #[DataProvider('provideAreaData')]
     public function it_can_return_an_area(
         int $areaId,
         string $name,
@@ -93,7 +89,7 @@ class AreaResourceTest extends TestCase
         $this->assertCount($children, $data->children);
     }
 
-    public function provideAreaData()
+    public function provideAreaData(): array
     {
         return [
             'England' => [

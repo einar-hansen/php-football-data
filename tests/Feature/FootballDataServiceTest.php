@@ -13,6 +13,7 @@ use EinarHansen\FootballData\Resources\TeamResource;
 use EinarHansen\Http\Contracts\Service\Service;
 use EinarHansen\Http\Message\RequestFactory;
 use Http\Mock\Client;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -25,14 +26,12 @@ class FootballDataServiceTest extends TestCase
     {
         $this->service = new FootballDataService(
             apiToken: '::apiToken::',
-            baseUri:  'https://api.football-data.org',
+            baseUri: 'https://api.football-data.org',
             client: new Client()
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_build_a_new_service(): void
     {
         $this->assertInstanceOf(
@@ -45,9 +44,7 @@ class FootballDataServiceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_create_requests(): void
     {
         $request = $this->service->makeRequest()->create();
@@ -57,16 +54,14 @@ class FootballDataServiceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_create_a_request_with_other_base_url(): void
     {
-        $service = new FootballDataService(
-            baseUri:  'https://example.org',
+        $footballDataService = new FootballDataService(
+            baseUri: 'https://example.org',
             client: new Client()
         );
-        $request = $service->makeRequest()->create();
+        $request = $footballDataService->makeRequest()->create();
         $this->assertInstanceOf(
             expected: RequestInterface::class,
             actual: $request,
@@ -77,29 +72,25 @@ class FootballDataServiceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_create_a_request_without_api_token(): void
     {
-        $service = new FootballDataService(
+        $footballDataService = new FootballDataService(
             apiToken: null,
             client: new Client()
         );
-        $request = $service->makeRequest()->create();
+        $request = $footballDataService->makeRequest()->create();
         $this->assertFalse(condition: $request->hasHeader('X-Auth-Token'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_create_a_request_with_api_token(): void
     {
-        $service = new FootballDataService(
+        $footballDataService = new FootballDataService(
             apiToken: '::apiToken::',
             client: new Client()
         );
-        $request = $service->makeRequest()->create();
+        $request = $footballDataService->makeRequest()->create();
         $this->assertTrue(condition: $request->hasHeader('X-Auth-Token'));
         $this->assertSame(
             expected: '::apiToken::',
@@ -108,18 +99,18 @@ class FootballDataServiceTest extends TestCase
     }
 
     /**
-    /**
-     * @test
+        /**
      */
+    #[Test]
     public function it_can_send_a_request_and_get_a_response(): void
     {
         $client = new Client();
-        $service = new FootballDataService(client: $client);
+        $footballDataService = new FootballDataService(client: $client);
 
         $response = $this->createMock(ResponseInterface::class);
         $client->addResponse($response);
 
-        $request = $service->makeRequest()->create();
+        $request = $footballDataService->makeRequest()->create();
         $returnedResponse = $client->sendRequest($request);
 
         $this->assertSame(
@@ -136,9 +127,7 @@ class FootballDataServiceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_get_areas_resource(): void
     {
         $this->assertInstanceOf(
@@ -147,9 +136,7 @@ class FootballDataServiceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_get_competitions_resource(): void
     {
         $this->assertInstanceOf(
@@ -158,9 +145,7 @@ class FootballDataServiceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_get_matches_resource(): void
     {
         $this->assertInstanceOf(
@@ -169,9 +154,7 @@ class FootballDataServiceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_get_persons_resource(): void
     {
         $this->assertInstanceOf(
@@ -180,9 +163,7 @@ class FootballDataServiceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_get_teams_resource(): void
     {
         $this->assertInstanceOf(

@@ -10,6 +10,7 @@ use EinarHansen\FootballData\Resources\PersonResource;
 use EinarHansen\FootballData\Tests\Fixtures\HasResponseFixtures;
 use EinarHansen\Http\Contracts\Service\Service;
 use Http\Mock\Client;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 
@@ -32,9 +33,7 @@ class PersonResourceTest extends TestCase
         $this->resource = $this->service->persons();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_return_the_service_instance(): void
     {
         $this->assertInstanceOf(
@@ -43,9 +42,7 @@ class PersonResourceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_return_a_collection_of_areas(): void
     {
         $this->client->addResponse(
