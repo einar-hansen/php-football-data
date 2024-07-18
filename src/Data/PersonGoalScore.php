@@ -13,8 +13,7 @@ class PersonGoalScore implements Data
         public readonly int $goals = 0,
         public readonly int $assists = 0,
         public readonly int $penalties = 0,
-    ) {
-    }
+    ) {}
 
     /**
      * {@inheritDoc}

@@ -15,7 +15,7 @@ class AreaResource extends Resource
      *
      * No filters are available for this endpoint.
      *
-     * @return  iterable<int, Area>|false
+     * @return iterable<int, Area>|false
      */
     public function all(): iterable|false
     {
@@ -38,15 +38,13 @@ class AreaResource extends Resource
 
     /**
      * List one particular area.
-     *
-     * @param  int  $areaId
      */
     public function find(int $areaId): Area|false|null
     {
         $response = $this->attempt(
             $this->makeRequest()
                 ->withPath(
-                    path: "/v4/areas/$areaId"
+                    path: "/v4/areas/{$areaId}"
                 )
         );
         if (! $response) {
@@ -62,7 +60,7 @@ class AreaResource extends Resource
     /**
      * List all competitions in an area.
      *
-     * @return  iterable<int, Competition>|false
+     * @return iterable<int, Competition>|false
      */
     public function competitions(Area|int $areaId): iterable|false
     {

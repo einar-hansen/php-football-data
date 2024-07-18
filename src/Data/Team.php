@@ -21,8 +21,7 @@ class Team implements Data
         public readonly ?string $colors = null,
         public readonly ?string $venue = null,
         public readonly ?DateTimeInterface $updatedAt = null,
-    ) {
-    }
+    ) {}
 
     /**
      * {@inheritDoc}
@@ -40,7 +39,7 @@ class Team implements Data
             'founded' => $this->founded,
             'colors' => $this->colors,
             'venue' => $this->venue,
-            'updatedAt' => $this->updatedAt?->format(format: DateTimeInterface::ISO8601),
+            'updatedAt' => $this->updatedAt?->format(format: DateTimeInterface::ATOM),
         ];
     }
 

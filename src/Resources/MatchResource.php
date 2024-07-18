@@ -22,38 +22,38 @@ class MatchResource extends Resource
      * dateTo={DATE}                    e.g. 2018-06-22
      * status={STATUS}                  EinarHansen\FootballData\Enums\Status
      *
-     * @param   array<int>|int $competitionIds
-     * @return  iterable<int, FootballMatch>|false
+     * @param  array<int>|int  $competitionIds
+     * @return iterable<int, FootballMatch>|false
      *
      * @throws FootballDataException
      */
     public function all(
-        array|int $matchIds = null,
-        string|DateTimeInterface $dateFrom = null,
-        string|DateTimeInterface $dateTo = null,
-        Status $status = null,
-        array|int $competitionIds = null,
+        array|int|null $matchIds = null,
+        string|DateTimeInterface|null $dateFrom = null,
+        string|DateTimeInterface|null $dateTo = null,
+        ?Status $status = null,
+        array|int|null $competitionIds = null,
     ): iterable|false {
         $response = $this->attempt(
             $this->makeRequest()
-            ->withPath(
-                path: '/v4/matches'
-            )->withQuery(
-                query: array_filter(
-                    array: [
-                        'ids' => $matchIds,
-                        'competitions' => $competitionIds,
-                        'dateFrom' => $dateFrom
-                            ? (is_string($dateFrom) ? $dateFrom : $dateFrom->format('Y-m-d'))
-                            : null,
-                        'dateTo' => $dateTo
-                            ? (is_string($dateTo) ? $dateTo : $dateTo->format('Y-m-d'))
-                            : null,
-                        'status' => $status ? $status->value : null,
-                    ],
-                    callback: fn ($query) => ! is_null($query)
+                ->withPath(
+                    path: '/v4/matches'
+                )->withQuery(
+                    query: array_filter(
+                        array: [
+                            'ids' => $matchIds,
+                            'competitions' => $competitionIds,
+                            'dateFrom' => $dateFrom
+                                ? (is_string($dateFrom) ? $dateFrom : $dateFrom->format('Y-m-d'))
+                                : null,
+                            'dateTo' => $dateTo
+                                ? (is_string($dateTo) ? $dateTo : $dateTo->format('Y-m-d'))
+                                : null,
+                            'status' => $status instanceof Status ? $status->value : null,
+                        ],
+                        callback: fn ($query): bool => ! is_null($query)
+                    )
                 )
-            )
         );
         if (! $response) {
             return false;
@@ -74,7 +74,7 @@ class MatchResource extends Resource
         $response = $this->attempt(
             $this->makeRequest()
                 ->withPath(
-                    path: "/v4/matches/$matchId"
+                    path: "/v4/matches/{$matchId}"
                 )
         );
         if (! $response) {
@@ -96,22 +96,22 @@ class MatchResource extends Resource
      * competitions={competitionIds}    The ids for the competitions to filter by
      * limit={LIMIT}                    The number of results
      *
-     * @param   array<int>|int $competitionIds
-     * @return  iterable<int, FootballMatch>|false
+     * @param  array<int>|int  $competitionIds
+     * @return iterable<int, FootballMatch>|false
      *
-     * @throws  FootballDataException
+     * @throws FootballDataException
      */
     public function matchHead2Head(
         int $matchId,
-        string|DateTimeInterface $dateFrom = null,
-        string|DateTimeInterface $dateTo = null,
-        array|int $competitionIds = null,
-        int $limit = null,
+        string|DateTimeInterface|null $dateFrom = null,
+        string|DateTimeInterface|null $dateTo = null,
+        array|int|null $competitionIds = null,
+        ?int $limit = null,
     ): iterable|false {
         $response = $this->attempt(
             $this->makeRequest()
                 ->withPath(
-                    path: "/v4/matches/$matchId/head2head"
+                    path: "/v4/matches/{$matchId}/head2head"
                 )->withQuery(
                     query: array_filter(
                         array: [
@@ -124,7 +124,7 @@ class MatchResource extends Resource
                                 : null,
                             'limit' => $limit,
                         ],
-                        callback: fn ($query) => ! is_null($query)
+                        callback: fn ($query): bool => ! is_null($query)
                     )
                 )
         );

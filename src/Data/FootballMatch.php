@@ -12,7 +12,7 @@ use EinarHansen\Http\Contracts\Data\Data;
 class FootballMatch implements Data
 {
     /**
-     * @param  \EinarHansen\FootballData\Data\Person[]  $referees
+     * @param  Person[]  $referees
      */
     public function __construct(
         public readonly int $id,
@@ -27,8 +27,7 @@ class FootballMatch implements Data
         public readonly DateTimeInterface $updatedAt,
         public readonly ?string $group = null,
         public readonly array $referees = [],
-    ) {
-    }
+    ) {}
 
     /**
      * {@inheritDoc}
@@ -42,14 +41,14 @@ class FootballMatch implements Data
             'awayTeam' => $this->awayTeam->toArray(),
             'score' => $this->score->toArray(),
             'matchday' => $this->matchday,
-            'startingAt' => $this->startingAt->format(format: DateTimeInterface::ISO8601),
+            'startingAt' => $this->startingAt->format(format: DateTimeInterface::ATOM),
             'status' => $this->status->value,
             'stage' => $this->stage->value,
-            'updatedAt' => $this->updatedAt->format(format: DateTimeInterface::ISO8601),
+            'updatedAt' => $this->updatedAt->format(format: DateTimeInterface::ATOM),
             'group' => $this->group,
             'referees' => array_map(
                 array: $this->referees,
-                callback: fn (Person $person) => $person->toArray()
+                callback: fn (Person $person): array => $person->toArray()
             ),
         ];
     }

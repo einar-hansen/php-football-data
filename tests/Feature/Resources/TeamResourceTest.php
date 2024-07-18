@@ -11,6 +11,7 @@ use EinarHansen\FootballData\Tests\Fixtures\HasResponseFixtures;
 use EinarHansen\Http\Collection\LazyCollectionFactory;
 use EinarHansen\Http\Contracts\Service\Service;
 use Http\Mock\Client;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 
@@ -34,10 +35,8 @@ class TeamResourceTest extends TestCase
         $this->resource = $this->service->teams();
     }
 
-    /**
-     * @test
-     */
-    public function it_can_return_the_service_instance()
+    #[Test]
+    public function it_can_return_the_service_instance(): void
     {
         $this->assertInstanceOf(
             expected: Service::class,
@@ -45,10 +44,8 @@ class TeamResourceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function it_returns_a_paginated_collection_of_teams()
+    #[Test]
+    public function it_returns_a_paginated_collection_of_teams(): void
     {
         $this->client->addResponse(
             response: $this->loadResponseFixture('Team/Teams-page-1.json')
@@ -64,10 +61,8 @@ class TeamResourceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function it_returns_all_teams_when_calling_all_collection_of_teams()
+    #[Test]
+    public function it_returns_all_teams_when_calling_all_collection_of_teams(): void
     {
         $this->client->addResponse(
             response: $this->loadResponseFixture('Team/Teams-page-1.json')

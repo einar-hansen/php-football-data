@@ -27,9 +27,9 @@ class CompetitionResource extends Resource
      * Optional filter of $areaId
      *
      * @param  int|int[]  $areaIds
-     * @return  iterable<int, Competition>|false
+     * @return iterable<int, Competition>|false
      */
-    public function all(int|array $areaIds = null): iterable|false
+    public function all(int|array|null $areaIds = null): iterable|false
     {
         $response = $this->attempt(
             $this->makeRequest()
@@ -38,7 +38,7 @@ class CompetitionResource extends Resource
                 )->withQuery(
                     query: array_filter(
                         array: ['areas' => $areaIds],
-                        callback: fn ($query) => ! is_null($query)
+                        callback: fn ($query): bool => ! is_null($query)
                     )
                 )
         );
@@ -55,16 +55,14 @@ class CompetitionResource extends Resource
 
     /**
      * List one particular competition.
-     *
-     * @param  int  $competitionId
      */
     public function find(int $competitionId): Competition|false|null
     {
         $response = $this->attempt(
             $this->makeRequest()
-            ->withPath(
-                path: "/v4/competitions/$competitionId"
-            )
+                ->withPath(
+                    path: "/v4/competitions/{$competitionId}"
+                )
         );
         if (! $response) {
             return false;
@@ -88,27 +86,28 @@ class CompetitionResource extends Resource
      * - group={GROUP}            Filtering for groupings in a competition
      * - season={YEAR}            The starting year of a season e.g. 2017 or 2016
      *
-     * @return  iterable<int, FootballMatch>|false
+     * @return iterable<int, FootballMatch>|false
      *
      * @throws FootballDataException
      */
     public function matches(
         Competition|int $competitionId,
-        string|DateTimeInterface $dateFrom = null,
-        string|DateTimeInterface $dateTo = null,
-        Status $status = null,
-        Stage $stage = null,
-        int $matchday = null,
-        string $group = null,
-        int $season = null
+        string|DateTimeInterface|null $dateFrom = null,
+        string|DateTimeInterface|null $dateTo = null,
+        ?Status $status = null,
+        ?Stage $stage = null,
+        ?int $matchday = null,
+        ?string $group = null,
+        ?int $season = null
     ): iterable|false {
         if ($competitionId instanceof Competition) {
             $competitionId = $competitionId->id;
         }
+
         $response = $this->attempt(
             $this->makeRequest()
                 ->withPath(
-                    path: "/v4/competitions/$competitionId/matches"
+                    path: "/v4/competitions/{$competitionId}/matches"
                 )->withQuery(
                     query: array_filter(
                         array: [
@@ -118,13 +117,13 @@ class CompetitionResource extends Resource
                             'dateTo' => $dateTo
                                 ? (is_string($dateTo) ? $dateTo : $dateTo->format('Y-m-d'))
                                 : null,
-                            'stage' => $stage ? $stage->value : null,
-                            'status' => $status ? $status->value : null,
+                            'stage' => $stage instanceof Stage ? $stage->value : null,
+                            'status' => $status instanceof Status ? $status->value : null,
                             'matchday' => $matchday,
                             'group' => $group,
                             'season' => $season,
                         ],
-                        callback: fn ($query) => ! is_null($query)
+                        callback: fn ($query): bool => ! is_null($query)
                     )
                 )
         );
@@ -147,23 +146,24 @@ class CompetitionResource extends Resource
      * - season={YEAR}          The starting year of a season e.g. 2017 or 2016
      * - date={DATE}            e.g. 2018-06-22
      *
-     * @return  iterable<int, Standing>|false
+     * @return iterable<int, Standing>|false
      *
      * @throws FootballDataException
      */
     public function standings(
         Competition|int $competitionId,
-        int $season = null,
-        int $matchday = null,
-        string|DateTimeInterface $date = null
+        ?int $season = null,
+        ?int $matchday = null,
+        string|DateTimeInterface|null $date = null
     ): iterable|false {
         if ($competitionId instanceof Competition) {
             $competitionId = $competitionId->id;
         }
+
         $response = $this->attempt(
             $this->makeRequest()
                 ->withPath(
-                    path: "/v4/competitions/$competitionId/standings"
+                    path: "/v4/competitions/{$competitionId}/standings"
                 )->withQuery(
                     query: array_filter(
                         array: [
@@ -173,7 +173,7 @@ class CompetitionResource extends Resource
                                 ? (is_string($date) ? $date : $date->format('Y-m-d'))
                                 : null,
                         ],
-                        callback: fn ($query) => ! is_null($query)
+                        callback: fn ($query): bool => ! is_null($query)
                     )
                 )
         );
@@ -194,27 +194,28 @@ class CompetitionResource extends Resource
      * Optional filters of:
      * - season={YEAR}            The starting year of a season e.g. 2017 or 2016
      *
-     * @return  iterable<int, Team>|false
+     * @return iterable<int, Team>|false
      *
-     * @throws  FootballDataException
+     * @throws FootballDataException
      */
     public function teams(
         Competition|int $competitionId,
-        int $season = null,
+        ?int $season = null,
     ): iterable|false {
         if ($competitionId instanceof Competition) {
             $competitionId = $competitionId->id;
         }
+
         $response = $this->attempt(
             $this->makeRequest()
                 ->withPath(
-                    path: "/v4/competitions/$competitionId/teams"
+                    path: "/v4/competitions/{$competitionId}/teams"
                 )->withQuery(
                     query: array_filter(
                         array: [
                             'season' => $season,
                         ],
-                        callback: fn ($query) => ! is_null($query)
+                        callback: fn ($query): bool => ! is_null($query)
                     )
                 )
         );
@@ -236,29 +237,30 @@ class CompetitionResource extends Resource
      * - season={YEAR}            The starting year of a season e.g. 2017 or 2016
      * - limit={LIMIT}            The number of results
      *
-     * @return  iterable<int, PersonGoalScore>|false
+     * @return iterable<int, PersonGoalScore>|false
      *
      * @throws FootballDataException
      */
     public function topScorers(
         Competition|int $competitionId,
-        int $season = null,
-        int $limit = null,
+        ?int $season = null,
+        ?int $limit = null,
     ): iterable|false {
         if ($competitionId instanceof Competition) {
             $competitionId = $competitionId->id;
         }
+
         $response = $this->attempt(
             $this->makeRequest()
                 ->withPath(
-                    path: "/v4/competitions/$competitionId/scorers"
+                    path: "/v4/competitions/{$competitionId}/scorers"
                 )->withQuery(
                     query: array_filter(
                         array: [
                             'season' => $season,
                             'limit' => $limit,
                         ],
-                        callback: fn ($query) => ! is_null($query)
+                        callback: fn ($query): bool => ! is_null($query)
                     )
                 )
         );

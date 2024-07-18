@@ -13,8 +13,7 @@ class Score implements Data
         public readonly ScoreResult $fullTime,
         public readonly ScoreResult $halfTime,
         public readonly ?string $winner = null,
-    ) {
-    }
+    ) {}
 
     /**
      * {@inheritDoc}

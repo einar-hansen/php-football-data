@@ -19,8 +19,7 @@ class Competition implements Data
         public readonly ?int $seasonCount = null,
         public readonly ?Season $season = null,
         public readonly ?DateTimeInterface $updatedAt = null,
-    ) {
-    }
+    ) {}
 
     /**
      * {@inheritDoc}
@@ -36,7 +35,7 @@ class Competition implements Data
             'area' => $this->area?->toArray(),
             'seasonCount' => $this->seasonCount,
             'season' => $this->season?->toArray(),
-            'updatedAt' => $this->updatedAt?->format(format: DateTimeInterface::ISO8601),
+            'updatedAt' => $this->updatedAt?->format(format: DateTimeInterface::ATOM),
         ];
     }
 

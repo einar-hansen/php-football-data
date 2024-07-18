@@ -20,8 +20,7 @@ class TablePosition implements Data
         public readonly int $goalsFor,
         public readonly int $goalsAgainst,
         public readonly int $goalDifference,
-    ) {
-    }
+    ) {}
 
     /**
      * {@inheritDoc}

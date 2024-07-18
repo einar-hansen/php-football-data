@@ -10,6 +10,7 @@ use EinarHansen\FootballData\Resources\CompetitionResource;
 use EinarHansen\FootballData\Tests\Fixtures\HasResponseFixtures;
 use EinarHansen\Http\Contracts\Service\Service;
 use Http\Mock\Client;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 
@@ -32,10 +33,8 @@ class CompetitionResourceTest extends TestCase
         $this->resource = $this->service->competitions();
     }
 
-    /**
-     * @test
-     */
-    public function it_can_return_the_service_instance()
+    #[Test]
+    public function it_can_return_the_service_instance(): void
     {
         $this->assertInstanceOf(
             expected: Service::class,
@@ -43,10 +42,8 @@ class CompetitionResourceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function it_can_return_a_collection_of_competitions()
+    #[Test]
+    public function it_can_return_a_collection_of_competitions(): void
     {
         $this->client->addResponse(
             response: $this->loadResponseFixture('Competition/Competitions.json')

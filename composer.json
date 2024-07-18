@@ -33,7 +33,7 @@
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^10.0",
         "symfony/http-client": "^6.1",
         "symfony/var-dumper": "^6.1"
     },
@@ -50,7 +50,7 @@
     "scripts": {
         "analyse": "vendor/bin/phpstan --level=9 analyse",
         "format": "vendor/bin/pint",
-        "test": "vendor/bin/pest",
+        "test": "vendor/bin/phpunit",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
     },
     "config": {

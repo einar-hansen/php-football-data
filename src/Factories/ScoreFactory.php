@@ -10,31 +10,21 @@ use EinarHansen\Http\Support\AttributeBag;
 
 class ScoreFactory implements DataFactory
 {
-    protected readonly ScoreResultFactory $scoreResultFactory;
-
-    protected readonly TeamFactory $teamFactory;
-
-    public function __construct(
-        ?ScoreResultFactory $scoreResultFactory = null,
-        ?TeamFactory $teamFactory = null,
-    ) {
-        $this->scoreResultFactory = $scoreResultFactory ?? new ScoreResultFactory();
-        $this->teamFactory = $teamFactory ?? new TeamFactory();
-    }
+    public function __construct(protected readonly ScoreResultFactory $scoreResultFactory = new ScoreResultFactory(), protected readonly TeamFactory $teamFactory = new TeamFactory()) {}
 
     public function make(array $attributes): Score
     {
         $attributes = new AttributeBag($attributes);
 
         return new Score(
-            duration:   $attributes->string(key: 'duration'),
-            fullTime:   $this->scoreResultFactory->make(
+            duration: $attributes->string(key: 'duration'),
+            fullTime: $this->scoreResultFactory->make(
                 attributes: $attributes->array(key: 'fullTime'),
             ),
-            halfTime:   $this->scoreResultFactory->make(
+            halfTime: $this->scoreResultFactory->make(
                 attributes: $attributes->array(key: 'halfTime'),
             ),
-            winner:     $attributes->string(key: 'winner'),
+            winner: $attributes->string(key: 'winner'),
         );
     }
 }

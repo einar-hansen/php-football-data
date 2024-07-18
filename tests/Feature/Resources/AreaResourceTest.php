@@ -10,6 +10,8 @@ use EinarHansen\FootballData\Resources\AreaResource;
 use EinarHansen\FootballData\Tests\Fixtures\HasResponseFixtures;
 use EinarHansen\Http\Contracts\Service\Service;
 use Http\Mock\Client;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 
@@ -32,10 +34,8 @@ class AreaResourceTest extends TestCase
         $this->resource = $this->service->areas();
     }
 
-    /**
-     * @test
-     */
-    public function it_can_return_the_service_instance()
+    #[Test]
+    public function it_can_return_the_service_instance(): void
     {
         $this->assertInstanceOf(
             expected: Service::class,
@@ -43,10 +43,8 @@ class AreaResourceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
-    public function it_can_return_a_collection_of_areas()
+    #[Test]
+    public function it_can_return_a_collection_of_areas(): void
     {
         $this->client->addResponse(
             response: $this->loadResponseFixture('Area/Areas.json')
@@ -62,10 +60,8 @@ class AreaResourceTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider provideAreaData
-     * @test
-     */
+    #[Test]
+    #[DataProvider('provideAreaData')]
     public function it_can_return_an_area(
         int $areaId,
         string $name,
@@ -73,7 +69,7 @@ class AreaResourceTest extends TestCase
         string $image,
         int $parentId,
         int $children,
-    ) {
+    ): void {
         $this->client->addResponse(
             response: $this->loadResponseFixture("Area/Area-{$areaId}.json")
         );
@@ -93,7 +89,7 @@ class AreaResourceTest extends TestCase
         $this->assertCount($children, $data->children);
     }
 
-    public function provideAreaData()
+    public static function provideAreaData(): array
     {
         return [
             'England' => [

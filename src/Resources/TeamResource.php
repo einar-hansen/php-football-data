@@ -24,7 +24,7 @@ class TeamResource extends Resource
      * limit={LIMIT}            The number of results
      * offset={OFFSET}          The offset/starting point when paginating
      *
-     * @return  iterable<int, Team>|false
+     * @return iterable<int, Team>|false
      */
     public function paginate(
         int $limit = 50,
@@ -33,30 +33,31 @@ class TeamResource extends Resource
         if ($page <= 0) {
             $page = 1;
         }
+
         $response = $this->attempt(
             $this->makeRequest()
-            ->withPath(
-                path: '/v4/teams'
-            )->withQuery(
-                query: [
-                    'limit' => (string) $limit,
-                    'offset' => (string) ($limit * ($page - 1)),
-                ],
-            )
+                ->withPath(
+                    path: '/v4/teams'
+                )->withQuery(
+                    query: [
+                        'limit' => (string) $limit,
+                        'offset' => (string) ($limit * ($page - 1)),
+                    ],
+                )
         );
         if (! $response) {
             return false;
         }
 
         return new TeamPaginator(
-            items:  $this->makeDataCollection(
+            items: $this->makeDataCollection(
                 response: $response,
                 factory: TeamFactory::class,
                 pointer: '/teams'
             ),
             perPage: $limit,
             currentPage: $page,
-            resource:  $this
+            resource: $this
         );
     }
 
@@ -65,7 +66,7 @@ class TeamResource extends Resource
      * request as you iterate through the results, until the server
      * is done. You can add maxPage to avoid anarchy.
      *
-     * @return  iterable<int, Team>|false
+     * @return iterable<int, Team>|false
      */
     public function all(int $maxPage = 10): iterable|false
     {
@@ -82,9 +83,9 @@ class TeamResource extends Resource
     {
         $response = $this->attempt(
             $this->makeRequest()
-            ->withPath(
-                path: "/v4/teams/$teamId"
-            )
+                ->withPath(
+                    path: "/v4/teams/{$teamId}"
+                )
         );
         if (! $response) {
             return false;
@@ -108,28 +109,29 @@ class TeamResource extends Resource
      * venue={VENUE}                    EinarHansen\FootballData\Enums\Venue
      * limit={LIMIT}                    The number of results
      *
-     * @param   array<int>|int $competitionIds
-     * @return  iterable<int, FootballMatch>|false
+     * @param  array<int>|int  $competitionIds
+     * @return iterable<int, FootballMatch>|false
      *
      * @throws FootballDataException
      */
     public function matches(
         Team|int $teamId,
-        string|DateTimeInterface $dateFrom = null,
-        string|DateTimeInterface $dateTo = null,
-        Status $status = null,
-        array|int $competitionIds = null,
-        Venue $venue = null,
-        int $season = null,
-        int $limit = null,
+        string|DateTimeInterface|null $dateFrom = null,
+        string|DateTimeInterface|null $dateTo = null,
+        ?Status $status = null,
+        array|int|null $competitionIds = null,
+        ?Venue $venue = null,
+        ?int $season = null,
+        ?int $limit = null,
     ): iterable|false {
         if ($teamId instanceof Team) {
             $teamId = $teamId->id;
         }
+
         $response = $this->attempt(
             $this->makeRequest()
                 ->withPath(
-                    path: "/v4/teams/$teamId/matches"
+                    path: "/v4/teams/{$teamId}/matches"
                 )->withQuery(
                     query: array_filter(
                         array: [
@@ -139,13 +141,13 @@ class TeamResource extends Resource
                             'dateTo' => $dateTo
                                 ? (is_string($dateTo) ? $dateTo : $dateTo->format('Y-m-d'))
                                 : null,
-                            'status' => $status ? $status->value : null,
+                            'status' => $status instanceof Status ? $status->value : null,
                             'competitionIds' => $competitionIds,
-                            'venue' => $venue ? $venue->value : null,
+                            'venue' => $venue instanceof Venue ? $venue->value : null,
                             'season' => $season,
                             'limit' => $limit,
                         ],
-                        callback: fn ($query) => ! is_null($query)
+                        callback: fn ($query): bool => ! is_null($query)
                     )
                 )
         );
@@ -161,15 +163,15 @@ class TeamResource extends Resource
     }
 
     /**
-     * @param  Paginator<int, Team> $paginator
-     * @param  int|null  $maxPage
+     * @param  Paginator<int, Team>  $paginator
      * @return iterable<int, Team>
      */
-    public static function loop(Paginator $paginator, int $maxPage = null): iterable
+    public static function loop(Paginator $paginator, ?int $maxPage = null): iterable
     {
         foreach ($paginator as $item) {
             yield $item;
         }
+
         if ($paginator->hasMorePages()) {
             if (! is_null($maxPage) && $paginator->currentPage() >= $maxPage) {
                 return null;

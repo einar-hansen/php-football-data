@@ -12,12 +12,9 @@ trait MapsCollections
      * @param  array<int, array<string, string>>  $collection
      * @param  string  $class
      * @param  array<string, string>  $extraData
-     * @return array
      */
     protected function mapToArray(array $collection, $class, array $extraData = []): array
     {
-        return array_map(function ($data) use ($class, $extraData) {
-            return new $class($data + $extraData, $this->forge);
-        }, $collection);
+        return array_map(fn ($data): object => new $class($data + $extraData, $this->forge), $collection);
     }
 }

@@ -10,15 +10,14 @@ use EinarHansen\Http\Contracts\Data\Data;
 class Standing implements Data
 {
     /**
-     * @param  \EinarHansen\FootballData\Data\TablePosition[]  $positions
+     * @param  TablePosition[]  $positions
      */
     public function __construct(
         public readonly Stage $stage,
         public readonly string $type,
         public readonly ?string $group = null,
         public readonly array $positions = [],
-    ) {
-    }
+    ) {}
 
     /**
      * {@inheritDoc}
@@ -31,7 +30,7 @@ class Standing implements Data
             'group' => $this->group,
             'positions' => array_map(
                 array: $this->positions,
-                callback: fn (TablePosition $tablePosition) => $tablePosition->toArray()
+                callback: fn (TablePosition $tablePosition): array => $tablePosition->toArray()
             ),
         ];
     }

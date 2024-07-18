@@ -19,8 +19,7 @@ class Area implements Data
         public readonly ?int $parentId = null,
         public readonly ?string $parentName = null,
         public readonly array $children = [],
-    ) {
-    }
+    ) {}
 
     /**
      * {@inheritDoc}
@@ -36,7 +35,7 @@ class Area implements Data
             'parentName' => $this->parentName,
             'children' => array_map(
                 array: $this->children,
-                callback: fn (Area $child) => $child->toArray()
+                callback: fn (Area $area): array => $area->toArray()
             ),
         ];
     }

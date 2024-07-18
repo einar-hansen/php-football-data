@@ -25,19 +25,20 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\UriFactoryInterface;
 
-final class FootballDataService extends Service implements ServiceContract, RateLimited
+final class FootballDataService extends Service implements RateLimited, ServiceContract
 {
-    public RateLimiterState $rateLimiterState;
-
     public function __construct(
         public readonly ?string $apiToken = null,
         public readonly string $baseUri = 'https://api.football-data.org',
-        ClientInterface $client = null,
-        RequestFactoryInterface $requestFactory = null,
-        UriFactoryInterface $uriFactory = null,
-        StreamFactoryInterface $streamFactory = null,
-        CollectionFactory $collectionFactory = null,
-        RateLimiterState $rateLimiterState = null
+        ?ClientInterface $client = null,
+        ?RequestFactoryInterface $requestFactory = null,
+        ?UriFactoryInterface $uriFactory = null,
+        ?StreamFactoryInterface $streamFactory = null,
+        ?CollectionFactory $collectionFactory = null,
+        public RateLimiterState $rateLimiterState = new MemoryRateLimitState(
+            maxAttempts: 10,
+            decaySeconds: 60,
+        )
     ) {
         parent::__construct(
             client: $client,
@@ -45,10 +46,6 @@ final class FootballDataService extends Service implements ServiceContract, Rate
             uriFactory: $uriFactory,
             streamFactory: $streamFactory,
             collectionFactory: $collectionFactory,
-        );
-        $this->rateLimiterState = $rateLimiterState ?? new MemoryRateLimitState(
-            maxAttempts: 10,
-            decaySeconds: 60,
         );
     }
 
@@ -65,12 +62,10 @@ final class FootballDataService extends Service implements ServiceContract, Rate
                 value: 'application/json'
             )->when(
                 value: $this->apiToken,
-                callback: function ($requestFactory, $token) {
-                    return $requestFactory->withHeader(
-                        name: 'X-Auth-Token',
-                        value: $token
-                    );
-                }
+                callback: fn ($requestFactory, $token) => $requestFactory->withHeader(
+                    name: 'X-Auth-Token',
+                    value: $token
+                )
             )->withMethod(method: RequestMethod::GET);
     }
 
@@ -86,29 +81,27 @@ final class FootballDataService extends Service implements ServiceContract, Rate
      * Attempts to execute a callback if it's not limited. If the
      * limit is reached it will return false.
      *
-     * @param  \EinarHansen\Http\Message\RequestFactory  $request
-     * @return  \Psr\Http\Message\ResponseInterface|false
-     *
      * @throws FootballDataException
      */
-    public function attempt(RequestFactory $request): ResponseInterface|false
+    public function attempt(RequestFactory $requestFactory): ResponseInterface|false
     {
         /** @var ResponseInterface|false $response */
-        $response = $this
-            ->getRateLimitState()
-            ->attempt(fn (): ResponseInterface => $request->send());
+        $response = $this->rateLimiterState
+            ->attempt(fn (): ResponseInterface => $requestFactory->send());
 
         if ($response) {
             // Since our response contains the exact details of the rate-limit state
             // we are going to manually override/set the states on our state object.
             if ($remaining = $response->getHeaderLine('X-Requests-Available-Minute')) {
-                $this->getRateLimitState()->setRemaining((int) $remaining);
+                $this->rateLimiterState->setRemaining((int) $remaining);
             }
+
             if ($expiresIn = $response->getHeaderLine('X-RequestCounter-Reset')) {
                 // We add an extra second to avoid hiting the limit, since the
                 // quantity of time (ms) in the second might be more than ours.
-                $this->getRateLimitState()->setExpiresIn(((int) $expiresIn) + 1);
+                $this->rateLimiterState->setExpiresIn(((int) $expiresIn) + 1);
             }
+
             if ((int) $response->getStatusCode() === StatusCode::BAD_REQUEST->value) {
                 /** @var array{ message: string } $body */
                 $body = json_decode(

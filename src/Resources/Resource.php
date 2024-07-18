@@ -10,9 +10,9 @@ use Psr\Http\Message\ResponseInterface;
 
 class Resource extends BaseResource
 {
-    public function attempt(RequestFactory $request): ResponseInterface|false
+    public function attempt(RequestFactory $requestFactory): ResponseInterface|false
     {
-        return $this->service()->attempt($request);
+        return $this->service()->attempt($requestFactory);
     }
 
     public function makeRequest(): RequestFactory

@@ -15,13 +15,13 @@ class AreaFactory implements DataFactory
         $attributes = new AttributeBag($attributes);
 
         return new Area(
-            id:         $attributes->integer(key: 'id'),
-            name:       $attributes->string(key: 'name'),
-            code:       $attributes->stringOrNull(key: 'countryCode') ?? $attributes->string(key: 'code'),
-            image:      $attributes->stringOrNull(key: 'flag'),
-            parentId:   $attributes->integerOrNull(key: 'parentAreaId'),
+            id: $attributes->integer(key: 'id'),
+            name: $attributes->string(key: 'name'),
+            code: $attributes->stringOrNull(key: 'countryCode') ?? $attributes->string(key: 'code'),
+            image: $attributes->stringOrNull(key: 'flag'),
+            parentId: $attributes->integerOrNull(key: 'parentAreaId'),
             parentName: $attributes->stringOrNull(key: 'parentArea'),
-            children:   $attributes->map(
+            children: $attributes->map(
                 key: 'childAreas',
                 callback: fn (array $child): Area => $this->make($child)
             )
