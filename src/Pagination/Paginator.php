@@ -18,9 +18,7 @@ class Paginator implements PaginatorContract
      * Pass closure or array if you want to run the collection multiple times, or
      * pass a Generator if you only want to run it one
      *
-     * @param  Traversable<int, Data>|array<int, Data>|(Closure(): Generator<int, Data>) $items
-     * @param  int  $perPage
-     * @param  int  $currentPage
+     * @param  Traversable<int, Data>|array<int, Data>|(Closure(): Generator<int, Data>)  $items
      */
     public function __construct(
         public readonly Closure|iterable $items,
@@ -29,8 +27,7 @@ class Paginator implements PaginatorContract
         public readonly ?Closure $nextPage = null,
         public readonly ?Closure $previousPage = null,
         public readonly ?Resource $resource = null,
-    ) {
-    }
+    ) {}
 
     /**
      * {@inheritDoc}
@@ -45,11 +42,15 @@ class Paginator implements PaginatorContract
      */
     public function nextPage(): ?static
     {
-        if ($this->hasMorePages() && ! is_null($this->nextPage)) {
-            return ($this->nextPage)();
+        if (! $this->hasMorePages()) {
+            return null;
         }
 
-        return null;
+        if (is_null($this->nextPage)) {
+            return null;
+        }
+
+        return ($this->nextPage)();
     }
 
     /**
@@ -57,11 +58,15 @@ class Paginator implements PaginatorContract
      */
     public function previousPage(): ?static
     {
-        if ($this->currentPage() > 1 && ! is_null($this->previousPage)) {
-            return ($this->previousPage)();
+        if ($this->currentPage() <= 1) {
+            return null;
         }
 
-        return null;
+        if (is_null($this->previousPage)) {
+            return null;
+        }
+
+        return ($this->previousPage)();
     }
 
     /**
@@ -93,9 +98,7 @@ class Paginator implements PaginatorContract
      */
     public function first(): ?Data
     {
-        $needle = null;
-
-        foreach ($this as $key => $value) {
+        foreach ($this as $value) {
             return $value;
         }
 
@@ -109,7 +112,7 @@ class Paginator implements PaginatorContract
     {
         $needle = null;
 
-        foreach ($this as $key => $value) {
+        foreach ($this as $value) {
             $needle = $value;
         }
 
@@ -132,8 +135,6 @@ class Paginator implements PaginatorContract
 
     /**
      * Reset the keys on the underlying array.
-     *
-     * @return static
      */
     public function values(): static
     {
@@ -176,18 +177,18 @@ class Paginator implements PaginatorContract
         return iterator_count($this->getIterator());
     }
 
-        /**
-         * {@inheritDoc}
-         */
-        public function isEmpty(): bool
-        {
-            $iterator = $this->getIterator();
-            if ($iterator instanceof Iterator) {
-                return $iterator->valid();
-            }
-
-            return $this->count() > 0;
+    /**
+     * {@inheritDoc}
+     */
+    public function isEmpty(): bool
+    {
+        $iterator = $this->getIterator();
+        if ($iterator instanceof Iterator) {
+            return $iterator->valid();
         }
+
+        return $this->count() > 0;
+    }
 
     /**
      * {@inheritDoc}
@@ -208,7 +209,7 @@ class Paginator implements PaginatorContract
     /**
      * Make an iterator from the given source.
      *
-     * @param  Traversable<int, Data>|array<int, Data>|(Closure(): Generator<int, Data>) $source
+     * @param  Traversable<int, Data>|array<int, Data>|(Closure(): Generator<int, Data>)  $source
      * @return Traversable<int, Data>
      */
     protected function makeIterator($source)
@@ -249,8 +250,8 @@ class Paginator implements PaginatorContract
         }
 
         return iterator_to_array(
-            iterator:  $this->getIterator(),
-            preserve_keys:  false
+            iterator: $this->getIterator(),
+            preserve_keys: false
         );
     }
 }

@@ -8,6 +8,7 @@ use IteratorAggregate;
 
 /**
  * @property TeamResource $resource
+ *
  * @implements IteratorAggregate<int, Team>
  */
 class TeamPaginator extends Paginator implements IteratorAggregate

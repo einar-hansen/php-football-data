@@ -14,9 +14,8 @@ class Season implements Data
         public readonly DateTimeInterface $startingAt,
         public readonly DateTimeInterface $endingAt,
         public readonly int $matchDay = 0,
-        public readonly ?Team $winner = null,
-    ) {
-    }
+        public readonly ?Team $team = null,
+    ) {}
 
     /**
      * {@inheritDoc}
@@ -28,7 +27,7 @@ class Season implements Data
             'startingAt' => $this->startingAt->format(format: DateTimeInterface::ISO8601),
             'endingAt' => $this->endingAt->format(format: DateTimeInterface::ISO8601),
             'matchDay' => $this->matchDay,
-            'winner' => $this->winner?->toArray(),
+            'winner' => $this->team?->toArray(),
         ];
     }
 

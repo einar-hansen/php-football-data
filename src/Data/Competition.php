@@ -19,8 +19,7 @@ class Competition implements Data
         public readonly ?int $seasonCount = null,
         public readonly ?Season $season = null,
         public readonly ?DateTimeInterface $updatedAt = null,
-    ) {
-    }
+    ) {}
 
     /**
      * {@inheritDoc}

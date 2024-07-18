@@ -10,7 +10,7 @@ use EinarHansen\Http\Contracts\Data\Data;
 class Person implements Data
 {
     /**
-     * @param  \EinarHansen\FootballData\Data\Competition[]  $competitions
+     * @param  Competition[]  $competitions
      */
     public function __construct(
         public readonly int $id,
@@ -25,8 +25,7 @@ class Person implements Data
         public readonly ?Team $team = null,
         public readonly ?Contract $contract = null,
         public readonly array $competitions = [],
-    ) {
-    }
+    ) {}
 
     /**
      * {@inheritDoc}
@@ -46,7 +45,7 @@ class Person implements Data
             'contract' => $this->contract?->toArray(),
             'competitions' => array_map(
                 array: $this->competitions,
-                callback: fn (Competition $competition) => $competition->toArray()
+                callback: fn (Competition $competition): array => $competition->toArray()
             ),
             'updatedAt' => $this->updatedAt->format(format: DateTimeInterface::ISO8601),
         ];

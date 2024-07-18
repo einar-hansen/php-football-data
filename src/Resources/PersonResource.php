@@ -15,16 +15,14 @@ class PersonResource extends Resource
 {
     /**
      * List one particular person.
-     *
-     * @param  int  $personId
      */
     public function find(int $personId): Person|false|null
     {
         $response = $this->attempt(
             $this->makeRequest()
-            ->withPath(
-                path: "/v4/persons/$personId"
-            )
+                ->withPath(
+                    path: "/v4/persons/{$personId}"
+                )
         );
         if (! $response) {
             return false;
@@ -47,27 +45,28 @@ class PersonResource extends Resource
      * limit={LIMIT}                    The number of results
      * offset={OFFSET}                  The offset/starting point when paginating
      *
-     * @param   array<int>|int $competitionIds
-     * @return  iterable<int, FootballMatch>|false
+     * @param  array<int>|int  $competitionIds
+     * @return iterable<int, FootballMatch>|false
      *
-     * @throws  FootballDataException
+     * @throws FootballDataException
      */
     public function matches(
         Person|int $personId,
-        string|DateTimeInterface $dateFrom = null,
-        string|DateTimeInterface $dateTo = null,
-        Status $status = null,
-        array|int $competitionIds = null,
-        int $limit = null,
-        int $offset = null
+        string|DateTimeInterface|null $dateFrom = null,
+        string|DateTimeInterface|null $dateTo = null,
+        ?Status $status = null,
+        array|int|null $competitionIds = null,
+        ?int $limit = null,
+        ?int $offset = null
     ): iterable|false {
         if ($personId instanceof Person) {
             $personId = $personId->id;
         }
+
         $response = $this->attempt(
             $this->makeRequest()
                 ->withPath(
-                    path: "/v4/players/$personId/matches"
+                    path: "/v4/players/{$personId}/matches"
                 )->withQuery(
                     query: array_filter(
                         array: [
@@ -77,12 +76,12 @@ class PersonResource extends Resource
                             'dateTo' => $dateTo
                                 ? (is_string($dateTo) ? $dateTo : $dateTo->format('Y-m-d'))
                                 : null,
-                            'status' => $status ? $status->value : null,
+                            'status' => $status instanceof Status ? $status->value : null,
                             'competitionIds' => $competitionIds,
                             'limit' => $limit,
                             'offset' => $offset,
                         ],
-                        callback: fn ($query) => ! is_null($query)
+                        callback: fn ($query): bool => ! is_null($query)
                     )
                 )
         );

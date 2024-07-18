@@ -11,8 +11,7 @@ class ScoreResult implements Data
     public function __construct(
         public readonly ?int $home = null,
         public readonly ?int $away = null,
-    ) {
-    }
+    ) {}
 
     /**
      * {@inheritDoc}

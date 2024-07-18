@@ -6,6 +6,4 @@ namespace EinarHansen\FootballData\Exceptions;
 
 use Exception;
 
-class FootballDataException extends Exception
-{
-}
+class FootballDataException extends Exception {}

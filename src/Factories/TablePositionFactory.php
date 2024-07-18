@@ -10,31 +10,25 @@ use EinarHansen\Http\Support\AttributeBag;
 
 class TablePositionFactory implements DataFactory
 {
-    protected readonly TeamFactory $teamFactory;
-
-    public function __construct(
-        ?TeamFactory $teamFactory = null,
-    ) {
-        $this->teamFactory = $teamFactory ?? new TeamFactory();
-    }
+    public function __construct(protected readonly TeamFactory $teamFactory = new TeamFactory()) {}
 
     public function make(array $attributes): TablePosition
     {
         $attributes = new AttributeBag($attributes);
 
         return new TablePosition(
-            position:       $attributes->integer('position'),
-            team:           $this->teamFactory->make(
+            position: $attributes->integer('position'),
+            team: $this->teamFactory->make(
                 attributes: $attributes->array(key: 'team'),
             ),
-            playedGames:    $attributes->integer('playedGames'),
-            form:           $attributes->string('form'),
-            won:            $attributes->integer('won'),
-            draw:           $attributes->integer('draw'),
-            lost:           $attributes->integer('lost'),
-            points:         $attributes->integer('points'),
-            goalsFor:       $attributes->integer('goalsFor'),
-            goalsAgainst:   $attributes->integer('goalsAgainst'),
+            playedGames: $attributes->integer('playedGames'),
+            form: $attributes->string('form'),
+            won: $attributes->integer('won'),
+            draw: $attributes->integer('draw'),
+            lost: $attributes->integer('lost'),
+            points: $attributes->integer('points'),
+            goalsFor: $attributes->integer('goalsFor'),
+            goalsAgainst: $attributes->integer('goalsAgainst'),
             goalDifference: $attributes->integer('goalDifference'),
         );
     }

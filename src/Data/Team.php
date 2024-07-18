@@ -21,8 +21,7 @@ class Team implements Data
         public readonly ?string $colors = null,
         public readonly ?string $venue = null,
         public readonly ?DateTimeInterface $updatedAt = null,
-    ) {
-    }
+    ) {}
 
     /**
      * {@inheritDoc}

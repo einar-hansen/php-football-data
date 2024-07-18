@@ -11,17 +11,7 @@ use EinarHansen\Http\Support\AttributeBag;
 
 class CompetitionFactory implements DataFactory
 {
-    protected readonly AreaFactory $areaFactory;
-
-    protected readonly SeasonFactory $seasonFactory;
-
-    public function __construct(
-        ?AreaFactory $areaFactory = null,
-        ?SeasonFactory $seasonFactory = null,
-    ) {
-        $this->areaFactory = $areaFactory ?? new AreaFactory();
-        $this->seasonFactory = $seasonFactory ?? new SeasonFactory();
-    }
+    public function __construct(protected readonly AreaFactory $areaFactory = new AreaFactory(), protected readonly SeasonFactory $seasonFactory = new SeasonFactory()) {}
 
     public function make(array $attributes): Competition
     {
@@ -30,19 +20,19 @@ class CompetitionFactory implements DataFactory
         $season = $attributes->arrayOrNull(key: 'currentSeason') ?? $attributes->arrayOrNull(key: 'season');
 
         return new Competition(
-            id:             $attributes->integer(key: 'id'),
-            name:           $attributes->string(key: 'name'),
-            code:           $attributes->string(key: 'code'),
-            type:           $attributes->string(key: 'type'),
-            image:          $attributes->stringOrNull(key: 'emblem'),
-            area:           $this->areaFactory->make(
+            id: $attributes->integer(key: 'id'),
+            name: $attributes->string(key: 'name'),
+            code: $attributes->string(key: 'code'),
+            type: $attributes->string(key: 'type'),
+            image: $attributes->stringOrNull(key: 'emblem'),
+            area: $this->areaFactory->make(
                 attributes: $attributes->array(key: 'area')
             ),
-            seasonCount:    $attributes->integer(key: 'numberOfAvailableSeasons'),
-            season:                 $season ? $this->seasonFactory->make(
+            seasonCount: $attributes->integer(key: 'numberOfAvailableSeasons'),
+            season: $season ? $this->seasonFactory->make(
                 attributes: $season,
             ) : null,
-            updatedAt:      $attributes->dateTime(
+            updatedAt: $attributes->dateTime(
                 key: 'lastUpdated',
                 format: DateTimeInterface::ISO8601
             ),
